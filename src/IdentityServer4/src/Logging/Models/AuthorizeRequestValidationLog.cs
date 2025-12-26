@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IdentityModel;
 using IdentityServer4.Extensions;
+using IdentityServer4.Security;
 using IdentityServer4.Validation;
 
 namespace IdentityServer4.Logging.Models
@@ -76,7 +77,7 @@ namespace IdentityServer4.Logging.Models
 
             DisplayMode = request.DisplayMode;
             PromptMode = request.PromptModes.ToSpaceSeparatedString();
-            LoginHint = request.LoginHint;
+            LoginHint = Sanitizer.Log.Sanitize(request.LoginHint);
             MaxAge = request.MaxAge;
             SessionId = request.SessionId;
         }

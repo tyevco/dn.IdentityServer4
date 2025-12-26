@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using IdentityModel;
 using IdentityServer4.Extensions;
+using IdentityServer4.Security;
 using IdentityServer4.Validation;
 
 namespace IdentityServer4.Logging.Models
@@ -45,7 +46,7 @@ namespace IdentityServer4.Logging.Models
             GrantType = request.GrantType;
             AuthorizationCode = request.AuthorizationCodeHandle.Obfuscate();
             RefreshToken = request.RefreshTokenHandle.Obfuscate();
-            UserName = request.UserName;
+            UserName = Sanitizer.Log.Sanitize(request.UserName);
         }
 
         public override string ToString()

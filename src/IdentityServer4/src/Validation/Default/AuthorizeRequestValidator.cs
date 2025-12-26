@@ -6,6 +6,7 @@ using IdentityModel;
 using IdentityServer4.Configuration;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
+using IdentityServer4.Security;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.Extensions.Logging;
@@ -320,7 +321,7 @@ namespace IdentityServer4.Validation
 
             if (!Uri.TryCreate(redirectUri, UriKind.Absolute, out _))
             {
-                LogError("malformed redirect_uri", redirectUri, request);
+                LogError("malformed redirect_uri", Sanitizer.Url.Sanitize(redirectUri, SanitizerMode.Clean), request);
                 return Invalid(request, description: "Invalid redirect_uri");
             }
 
@@ -338,7 +339,7 @@ namespace IdentityServer4.Validation
             //////////////////////////////////////////////////////////
             if (await _uriValidator.IsRedirectUriValidAsync(redirectUri, request.Client) == false)
             {
-                LogError("Invalid redirect_uri", redirectUri, request);
+                LogError("Invalid redirect_uri", Sanitizer.Url.Sanitize(redirectUri, SanitizerMode.Clean), request);
                 return Invalid(request, OidcConstants.AuthorizeErrors.InvalidRequest, "Invalid redirect_uri");
             }
 
@@ -762,7 +763,7 @@ namespace IdentityServer4.Validation
                     return Invalid(request, description: "Invalid login_hint");
                 }
 
-                request.LoginHint = loginHint;
+                request.LoginHint = Sanitizer.Log.Sanitize(loginHint);
             }
 
             //////////////////////////////////////////////////////////

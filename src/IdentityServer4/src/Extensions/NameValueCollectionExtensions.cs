@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
 using System.Text.Encodings.Web;
+using IdentityServer4.Security;
 
 namespace IdentityServer4.Extensions
 {
@@ -71,7 +72,8 @@ namespace IdentityServer4.Extensions
                 var values = collection.GetValues(name);
                 var value = values.First();
                 value = HtmlEncoder.Default.Encode(value);
-                builder.AppendFormat(inputFieldFormat, name, value);
+                var sanitizedName = Sanitizer.Html.Sanitize(name, SanitizerMode.Clean);
+                builder.AppendFormat(inputFieldFormat, sanitizedName, value);
             }
 
             return builder.ToString();

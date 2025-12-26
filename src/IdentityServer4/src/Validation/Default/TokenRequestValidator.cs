@@ -7,6 +7,7 @@ using IdentityServer4.Configuration;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
+using IdentityServer4.Security;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.Extensions.Logging;
@@ -425,7 +426,7 @@ namespace IdentityServer4.Validation
                 return Invalid(OidcConstants.TokenErrors.InvalidGrant);
             }
 
-            _validatedRequest.UserName = userName;
+            _validatedRequest.UserName = Sanitizer.Log.Sanitize(userName);
 
 
             /////////////////////////////////////////////
@@ -447,7 +448,7 @@ namespace IdentityServer4.Validation
                 if (resourceOwnerContext.Result.Error == OidcConstants.TokenErrors.UnsupportedGrantType)
                 {
                     LogError("Resource owner password credential grant type not supported");
-                    await RaiseFailedResourceOwnerAuthenticationEventAsync(userName, "password grant type not supported", resourceOwnerContext.Request.Client.ClientId);
+                    await RaiseFailedResourceOwnerAuthenticationEventAsync(Sanitizer.Log.Sanitize(userName), "password grant type not supported", resourceOwnerContext.Request.Client.ClientId);
 
                     return Invalid(OidcConstants.TokenErrors.UnsupportedGrantType, customResponse: resourceOwnerContext.Result.CustomResponse);
                 }
@@ -460,7 +461,7 @@ namespace IdentityServer4.Validation
                 }
 
                 LogInformation("User authentication failed: ", errorDescription ?? resourceOwnerContext.Result.Error);
-                await RaiseFailedResourceOwnerAuthenticationEventAsync(userName, errorDescription, resourceOwnerContext.Request.Client.ClientId);
+                await RaiseFailedResourceOwnerAuthenticationEventAsync(Sanitizer.Log.Sanitize(userName), errorDescription, resourceOwnerContext.Request.Client.ClientId);
 
                 return Invalid(resourceOwnerContext.Result.Error, errorDescription, resourceOwnerContext.Result.CustomResponse);
             }
@@ -469,7 +470,7 @@ namespace IdentityServer4.Validation
             {
                 var error = "User authentication failed: no principal returned";
                 LogError(error);
-                await RaiseFailedResourceOwnerAuthenticationEventAsync(userName, error, resourceOwnerContext.Request.Client.ClientId);
+                await RaiseFailedResourceOwnerAuthenticationEventAsync(Sanitizer.Log.Sanitize(userName), error, resourceOwnerContext.Request.Client.ClientId);
 
                 return Invalid(OidcConstants.TokenErrors.InvalidGrant);
             }
@@ -483,15 +484,15 @@ namespace IdentityServer4.Validation
             if (isActiveCtx.IsActive == false)
             {
                 LogError("User has been disabled", new { subjectId = resourceOwnerContext.Result.Subject.GetSubjectId() });
-                await RaiseFailedResourceOwnerAuthenticationEventAsync(userName, "user is inactive", resourceOwnerContext.Request.Client.ClientId);
+                await RaiseFailedResourceOwnerAuthenticationEventAsync(Sanitizer.Log.Sanitize(userName), "user is inactive", resourceOwnerContext.Request.Client.ClientId);
 
                 return Invalid(OidcConstants.TokenErrors.InvalidGrant);
             }
 
-            _validatedRequest.UserName = userName;
+            _validatedRequest.UserName = Sanitizer.Log.Sanitize(userName);
             _validatedRequest.Subject = resourceOwnerContext.Result.Subject;
 
-            await RaiseSuccessfulResourceOwnerAuthenticationEventAsync(userName, resourceOwnerContext.Result.Subject.GetSubjectId(), resourceOwnerContext.Request.Client.ClientId);
+            await RaiseSuccessfulResourceOwnerAuthenticationEventAsync(Sanitizer.Log.Sanitize(userName), resourceOwnerContext.Result.Subject.GetSubjectId(), resourceOwnerContext.Request.Client.ClientId);
             _logger.LogDebug("Resource owner password token request validation success.");
             return Valid(resourceOwnerContext.Result.CustomResponse);
         }
@@ -847,12 +848,12 @@ namespace IdentityServer4.Validation
 
         private Task RaiseSuccessfulResourceOwnerAuthenticationEventAsync(string userName, string subjectId, string clientId)
         {
-            return _events.RaiseAsync(new UserLoginSuccessEvent(userName, subjectId, null, interactive: false, clientId));
+            return _events.RaiseAsync(new UserLoginSuccessEvent(Sanitizer.Log.Sanitize(userName), subjectId, null, interactive: false, clientId));
         }
 
         private Task RaiseFailedResourceOwnerAuthenticationEventAsync(string userName, string error, string clientId)
         {
-            return _events.RaiseAsync(new UserLoginFailureEvent(userName, error, interactive: false, clientId: clientId));
+            return _events.RaiseAsync(new UserLoginFailureEvent(Sanitizer.Log.Sanitize(userName), error, interactive: false, clientId: clientId));
         }
     }
 }
