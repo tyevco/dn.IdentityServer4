@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using IdentityModel;
 using IdentityServer4.Models;
@@ -158,7 +159,11 @@ namespace IdentityServer4.Services
                 throw new ArgumentException("Client requires SessionId", nameof(request.SessionId));
             }
 
-            var json = "{\"" + OidcConstants.Events.BackChannelLogout + "\":{} }";
+            var eventsObj = new Dictionary<string, object>
+            {
+                [OidcConstants.Events.BackChannelLogout] = new { }
+            };
+            var json = JsonSerializer.Serialize(eventsObj);
 
             var claims = new List<Claim>
             {

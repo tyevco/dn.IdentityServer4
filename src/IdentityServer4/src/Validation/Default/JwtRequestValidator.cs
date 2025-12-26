@@ -14,8 +14,7 @@ using IdentityServer4.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
 
 namespace IdentityServer4.Validation
 {
@@ -205,11 +204,11 @@ namespace IdentityServer4.Validation
                         case string s:
                             payload.Add(key, s);
                             break;
-                        case JObject jobj:
-                            payload.Add(key, jobj.ToString(Formatting.None));
+                        case JsonElement elem when elem.ValueKind == JsonValueKind.Object:
+                            payload.Add(key, JsonSerializer.Serialize(elem));
                             break;
-                        case JArray jarr:
-                            payload.Add(key, jarr.ToString(Formatting.None));
+                        case JsonElement elem when elem.ValueKind == JsonValueKind.Array:
+                            payload.Add(key, JsonSerializer.Serialize(elem));
                             break;
                     }
                 }

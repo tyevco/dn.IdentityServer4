@@ -67,7 +67,7 @@ namespace IdentityServer4.Models
             Name = name;
             DisplayName = displayName;
 
-            if (!userClaims.IsNullOrEmpty())
+            if (!userClaims.CollectionIsNullOrEmpty())
             {
                 foreach (var type in userClaims)
                 {
