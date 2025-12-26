@@ -87,5 +87,56 @@ namespace IdentityServer.UnitTests.Extensions
             CheckOrigin("test://localhost:8080/test", null);
             CheckOrigin("test://localhost:8080/test/resource", null);
         }
+
+        [Theory]
+        [InlineData("/local")]
+        [InlineData("/local/path")]
+        [InlineData("~/local")]
+        [InlineData("~/local/path")]
+        public void IsLocalUrl_WithValidLocalUrls_ReturnsTrue(string url)
+        {
+            Assert.True(url.IsLocalUrl());
+        }
+
+        [Theory]
+        [InlineData("http://example.com")]
+        [InlineData("https://example.com")]
+        [InlineData("//example.com")]
+        [InlineData("http://example.com/test")]
+        public void IsLocalUrl_WithAbsoluteUrls_ReturnsFalse(string url)
+        {
+            Assert.False(url.IsLocalUrl());
+        }
+
+        [Theory]
+        [InlineData("/\u0000")] // Null character
+        [InlineData("/\u0001")] // Start of heading
+        [InlineData("/\u0009")] // Tab
+        [InlineData("/\u000A")] // Line feed
+        [InlineData("/\u000D")] // Carriage return
+        [InlineData("/\u001F")] // Unit separator
+        [InlineData("/local\u0000path")] // Null in middle
+        [InlineData("/local\u000Dpath")] // CR in middle
+        public void IsLocalUrl_WithControlCharacters_ReturnsFalse(string url)
+        {
+            // CVE-2024-39694: Control characters should cause rejection
+            Assert.False(url.IsLocalUrl());
+        }
+
+        [Theory]
+        [InlineData("//\u0000example.com")] // Null after //
+        [InlineData("//ex\u0000ample.com")] // Null in domain
+        public void IsLocalUrl_WithControlCharactersInDoubleSlash_ReturnsFalse(string url)
+        {
+            // CVE-2024-39694: Control characters in // URLs should cause rejection
+            Assert.False(url.IsLocalUrl());
+        }
+
+        [Fact]
+        public void IsLocalUrl_WithNullOrEmpty_ReturnsFalse()
+        {
+            Assert.False(((string)null).IsLocalUrl());
+            Assert.False(string.Empty.IsLocalUrl());
+        }
     }
 }

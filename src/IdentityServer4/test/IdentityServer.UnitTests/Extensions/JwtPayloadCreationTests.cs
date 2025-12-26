@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using FluentAssertions;
 using IdentityModel;
 using IdentityServer.UnitTests.Common;
@@ -64,6 +65,110 @@ namespace IdentityServer.UnitTests.Extensions
             var scopes = payload.Claims.Where(c => c.Type == JwtClaimTypes.Scope).ToList();
             scopes.Count().Should().Be(1);
             scopes.First().Value.Should().Be("scope1 scope2 scope3");
+        }
+
+        [Fact]
+        public void Should_handle_json_object_claims_with_system_text_json()
+        {
+            // Arrange
+            var jsonObject = JsonSerializer.Serialize(new { key = "value", number = 42 });
+            var claims = new List<Claim>
+            {
+                new Claim("custom_claim", jsonObject, ClaimValueTypes.String)
+            };
+
+            var token = new Token(OidcConstants.TokenTypes.AccessToken)
+            {
+                CreationTime = DateTime.UtcNow,
+                Issuer = "issuer",
+                Lifetime = 60,
+                Claims = claims,
+                ClientId = "client"
+            };
+
+            var options = new IdentityServerOptions();
+
+            // Act
+            var payload = token.CreateJwtPayload(new SystemClock(), options, TestLogger.Create<JwtPayloadCreationTests>());
+
+            // Assert
+            payload.Should().NotBeNull();
+            var customClaim = payload.Claims.FirstOrDefault(c => c.Type == "custom_claim");
+            customClaim.Should().NotBeNull();
+
+            // Verify it's valid JSON
+            var parsed = JsonDocument.Parse(customClaim.Value);
+            parsed.RootElement.ValueKind.Should().Be(JsonValueKind.Object);
+        }
+
+        [Fact]
+        public void Should_handle_json_array_claims_with_system_text_json()
+        {
+            // Arrange
+            var jsonArray = JsonSerializer.Serialize(new[] { "item1", "item2", "item3" });
+            var claims = new List<Claim>
+            {
+                new Claim("array_claim", jsonArray, ClaimValueTypes.String)
+            };
+
+            var token = new Token(OidcConstants.TokenTypes.AccessToken)
+            {
+                CreationTime = DateTime.UtcNow,
+                Issuer = "issuer",
+                Lifetime = 60,
+                Claims = claims,
+                ClientId = "client"
+            };
+
+            var options = new IdentityServerOptions();
+
+            // Act
+            var payload = token.CreateJwtPayload(new SystemClock(), options, TestLogger.Create<JwtPayloadCreationTests>());
+
+            // Assert
+            payload.Should().NotBeNull();
+            var arrayClaim = payload.Claims.FirstOrDefault(c => c.Type == "array_claim");
+            arrayClaim.Should().NotBeNull();
+
+            // Verify it's valid JSON array
+            var parsed = JsonDocument.Parse(arrayClaim.Value);
+            parsed.RootElement.ValueKind.Should().Be(JsonValueKind.Array);
+            parsed.RootElement.GetArrayLength().Should().Be(3);
+        }
+
+        [Fact]
+        public void Should_handle_confirmation_claim_as_rfc7800_compliant()
+        {
+            // Arrange - confirmation claim must be an object, not an array
+            var confirmationJson = JsonSerializer.Serialize(new { x5t = "thumbprint" });
+            var claims = new List<Claim>
+            {
+                new Claim(JwtClaimTypes.Confirmation, confirmationJson, ClaimValueTypes.String)
+            };
+
+            var token = new Token(OidcConstants.TokenTypes.AccessToken)
+            {
+                CreationTime = DateTime.UtcNow,
+                Issuer = "issuer",
+                Lifetime = 60,
+                Claims = claims,
+                ClientId = "client",
+                Confirmation = confirmationJson
+            };
+
+            var options = new IdentityServerOptions();
+
+            // Act
+            var payload = token.CreateJwtPayload(new SystemClock(), options, TestLogger.Create<JwtPayloadCreationTests>());
+
+            // Assert
+            payload.Should().NotBeNull();
+            var cnfClaim = payload.Claims.FirstOrDefault(c => c.Type == JwtClaimTypes.Confirmation);
+            cnfClaim.Should().NotBeNull();
+
+            // Verify it's an object (RFC 7800 compliant)
+            var parsed = JsonDocument.Parse(cnfClaim.Value);
+            parsed.RootElement.ValueKind.Should().Be(JsonValueKind.Object);
         }
     }
 }
