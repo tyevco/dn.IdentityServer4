@@ -68,6 +68,7 @@ namespace IdentityServer.IntegrationTests.Clients
                 Address = TokenEndpoint,
 
                 ClientId = ClientId,
+                ClientCredentialStyle = ClientCredentialStyle.PostBody,
                 ClientAssertion =
                 {
                     Type = OidcConstants.ClientAssertionTypes.JwtBearer,
@@ -90,6 +91,7 @@ namespace IdentityServer.IntegrationTests.Clients
                 Address = TokenEndpoint,
                 ClientId = "client",
 
+                ClientCredentialStyle = ClientCredentialStyle.PostBody,
                 ClientAssertion =
                 {
                     Type = OidcConstants.ClientAssertionTypes.JwtBearer,
@@ -112,6 +114,7 @@ namespace IdentityServer.IntegrationTests.Clients
                 Address = TokenEndpoint,
 
                 ClientId = ClientId,
+                ClientCredentialStyle = ClientCredentialStyle.PostBody,
                 ClientAssertion =
                 {
                     Type = OidcConstants.ClientAssertionTypes.JwtBearer,
@@ -129,6 +132,7 @@ namespace IdentityServer.IntegrationTests.Clients
                 Address = TokenEndpoint,
 
                 ClientId = ClientId,
+                ClientCredentialStyle = ClientCredentialStyle.PostBody,
                 ClientAssertion =
                 {
                     Type = OidcConstants.ClientAssertionTypes.JwtBearer,
@@ -150,6 +154,7 @@ namespace IdentityServer.IntegrationTests.Clients
                 Address = TokenEndpoint,
 
                 ClientId = ClientId,
+                ClientCredentialStyle = ClientCredentialStyle.PostBody,
                 ClientAssertion =
                 {
                     Type = OidcConstants.ClientAssertionTypes.JwtBearer,
@@ -175,6 +180,7 @@ namespace IdentityServer.IntegrationTests.Clients
                 Address = TokenEndpoint,
 
                 ClientId = clientId,
+                ClientCredentialStyle = ClientCredentialStyle.PostBody,
                 ClientAssertion =
                 {
                     Type = OidcConstants.ClientAssertionTypes.JwtBearer,
@@ -206,14 +212,14 @@ namespace IdentityServer.IntegrationTests.Clients
             var payload = GetPayload(response);
             
             payload.Count().Should().Be(8);
-            payload.Should().Contain("iss", "https://idsvr4");
-            payload.Should().Contain("client_id", ClientId);
+            JsonTestHelpers.GetString(payload["iss"]).Should().Be("https://idsvr4");
+            JsonTestHelpers.GetString(payload["client_id"]).Should().Be(ClientId);
             payload.Keys.Should().Contain("iat");
-            
-            var scopes = payload["scope"] as JsonArray;
+
+            var scopes = JsonTestHelpers.GetJsonArray(payload["scope"]);
             scopes.First().ToString().Should().Be("api1");
 
-            payload["aud"].Should().Be("api");
+            JsonTestHelpers.GetString(payload["aud"]).Should().Be("api");
         }
 
         private Dictionary<string, object> GetPayload(TokenResponse response)

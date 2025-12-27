@@ -243,7 +243,7 @@ namespace IdentityServer4.Validation
                         if (payloadResponseType != responseType)
                         {
                             LogError("response_type in JWT payload does not match response_type in request", request);
-                            return Invalid(request, description: "Invalid JWT request");
+                            return Invalid(request, error: OidcConstants.AuthorizeErrors.InvalidRequestObject, description: "Invalid JWT request");
                         }
                     }
                 }
@@ -254,7 +254,7 @@ namespace IdentityServer4.Validation
                     if (!string.Equals(request.Client.ClientId, payloadClientId, StringComparison.Ordinal))
                     {
                         LogError("client_id in JWT payload does not match client_id in request", request);
-                        return Invalid(request, description: "Invalid JWT request");
+                        return Invalid(request, error: OidcConstants.AuthorizeErrors.InvalidRequestObject, description: "Invalid JWT request");
                     }
                 }
                 else
@@ -282,7 +282,7 @@ namespace IdentityServer4.Validation
                         if (!string.Equals(value, qsValue, StringComparison.Ordinal))
                         {
                             LogError("parameter mismatch between request object and query string parameter.", request);
-                            return Invalid(request, description: "Parameter mismatch in JWT request");
+                            return Invalid(request, error: OidcConstants.AuthorizeErrors.InvalidRequestObject, description: "Parameter mismatch in JWT request");
                         }
                     }
 

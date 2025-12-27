@@ -14,6 +14,7 @@ using FluentAssertions;
 using IdentityModel;
 using IdentityModel.Client;
 using IdentityServer.IntegrationTests.Clients.Setup;
+using IdentityServer.IntegrationTests.Common;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using System.Text.Json;
@@ -70,17 +71,17 @@ namespace IdentityServer.IntegrationTests.Clients
             exp.Should().BeGreaterThan(unixNow + 3595);
 
             payload.Count().Should().Be(12);
-            payload.Should().Contain("iss", "https://idsvr4");
-            payload.Should().Contain("client_id", "client.custom");
-            payload.Should().Contain("sub", "818727");
-            payload.Should().Contain("idp", "local");
+            JsonTestHelpers.GetString(payload["iss"]).Should().Be("https://idsvr4");
+            JsonTestHelpers.GetString(payload["client_id"]).Should().Be("client.custom");
+            JsonTestHelpers.GetString(payload["sub"]).Should().Be("818727");
+            JsonTestHelpers.GetString(payload["idp"]).Should().Be("local");
 
-            payload["aud"].Should().Be("api");
+            JsonTestHelpers.GetString(payload["aud"]).Should().Be("api");
 
-            var scopes = payload["scope"] as JsonArray;
+            var scopes = JsonTestHelpers.GetJsonArray(payload["scope"]);
             scopes.First().ToString().Should().Be("api1");
 
-            var amr = payload["amr"] as JsonArray;
+            var amr = JsonTestHelpers.GetJsonArray(payload["amr"]);
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("custom");
         }
@@ -119,18 +120,18 @@ namespace IdentityServer.IntegrationTests.Clients
             exp.Should().BeGreaterThan(unixNow + 3595);
 
             payload.Count().Should().Be(13);
-            payload.Should().Contain("iss", "https://idsvr4");
-            payload.Should().Contain("client_id", "client.custom");
-            payload.Should().Contain("sub", "818727");
-            payload.Should().Contain("idp", "local");
-            payload.Should().Contain("extra_claim", "extra_value");
+            JsonTestHelpers.GetString(payload["iss"]).Should().Be("https://idsvr4");
+            JsonTestHelpers.GetString(payload["client_id"]).Should().Be("client.custom");
+            JsonTestHelpers.GetString(payload["sub"]).Should().Be("818727");
+            JsonTestHelpers.GetString(payload["idp"]).Should().Be("local");
+            JsonTestHelpers.GetString(payload["extra_claim"]).Should().Be("extra_value");
 
-            payload["aud"].Should().Be("api");
+            JsonTestHelpers.GetString(payload["aud"]).Should().Be("api");
 
-            var scopes = payload["scope"] as JsonArray;
+            var scopes = JsonTestHelpers.GetJsonArray(payload["scope"]);
             scopes.First().ToString().Should().Be("api1");
 
-            var amr = payload["amr"] as JsonArray;
+            var amr = JsonTestHelpers.GetJsonArray(payload["amr"]);
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("custom");
         }
@@ -186,18 +187,18 @@ namespace IdentityServer.IntegrationTests.Clients
             exp.Should().BeGreaterThan(unixNow + 3595);
 
             payload.Count().Should().Be(13);
-            payload.Should().Contain("iss", "https://idsvr4");
-            payload.Should().Contain("client_id", "client.custom");
-            payload.Should().Contain("sub", "818727");
-            payload.Should().Contain("idp", "local");
-            payload.Should().Contain("extra_claim", "extra_value");
+            JsonTestHelpers.GetString(payload["iss"]).Should().Be("https://idsvr4");
+            JsonTestHelpers.GetString(payload["client_id"]).Should().Be("client.custom");
+            JsonTestHelpers.GetString(payload["sub"]).Should().Be("818727");
+            JsonTestHelpers.GetString(payload["idp"]).Should().Be("local");
+            JsonTestHelpers.GetString(payload["extra_claim"]).Should().Be("extra_value");
 
-            payload["aud"].Should().Be("api");
+            JsonTestHelpers.GetString(payload["aud"]).Should().Be("api");
 
-            var scopes = payload["scope"] as JsonArray;
+            var scopes = JsonTestHelpers.GetJsonArray(payload["scope"]);
             scopes.First().ToString().Should().Be("api1");
 
-            var amr = payload["amr"] as JsonArray;
+            var amr = JsonTestHelpers.GetJsonArray(payload["amr"]);
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("custom");
         }
@@ -230,12 +231,12 @@ namespace IdentityServer.IntegrationTests.Clients
             var payload = GetPayload(response);
 
             payload.Count().Should().Be(8);
-            payload.Should().Contain("iss", "https://idsvr4");
-            payload.Should().Contain("client_id", "client.custom");
+            JsonTestHelpers.GetString(payload["iss"]).Should().Be("https://idsvr4");
+            JsonTestHelpers.GetString(payload["client_id"]).Should().Be("client.custom");
 
-            payload["aud"].Should().Be("api");
+            JsonTestHelpers.GetString(payload["aud"]).Should().Be("api");
 
-            var scopes = payload["scope"] as JsonArray;
+            var scopes = JsonTestHelpers.GetJsonArray(payload["scope"]);
             scopes.First().ToString().Should().Be("api1");
         }
 
@@ -266,18 +267,18 @@ namespace IdentityServer.IntegrationTests.Clients
             var payload = GetPayload(response);
 
             payload.Count().Should().Be(12);
-            payload.Should().Contain("iss", "https://idsvr4");
-            payload.Should().Contain("client_id", "client.custom");
-            payload.Should().Contain("sub", "818727");
-            payload.Should().Contain("idp", "local");
+            JsonTestHelpers.GetString(payload["iss"]).Should().Be("https://idsvr4");
+            JsonTestHelpers.GetString(payload["client_id"]).Should().Be("client.custom");
+            JsonTestHelpers.GetString(payload["sub"]).Should().Be("818727");
+            JsonTestHelpers.GetString(payload["idp"]).Should().Be("local");
 
-            payload["aud"].Should().Be("api");
+            JsonTestHelpers.GetString(payload["aud"]).Should().Be("api");
 
-            var amr = payload["amr"] as JsonArray;
+            var amr = JsonTestHelpers.GetJsonArray(payload["amr"]);
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("custom");
 
-            var scopes = payload["scope"] as JsonArray;
+            var scopes = JsonTestHelpers.GetJsonArray(payload["scope"]);
             scopes.Count().Should().Be(3);
             scopes.First().ToString().Should().Be("api1");
             scopes.Skip(1).First().ToString().Should().Be("api2");
@@ -390,17 +391,17 @@ namespace IdentityServer.IntegrationTests.Clients
             exp.Should().BeGreaterThan(unixNow + 4995);
 
             payload.Count().Should().Be(10);
-            payload.Should().Contain("iss", "https://idsvr4");
-            payload.Should().Contain("client_id", "client.dynamic");
-            payload.Should().Contain("sub", "818727");
-            payload.Should().Contain("idp", "local");
+            JsonTestHelpers.GetString(payload["iss"]).Should().Be("https://idsvr4");
+            JsonTestHelpers.GetString(payload["client_id"]).Should().Be("client.dynamic");
+            JsonTestHelpers.GetString(payload["sub"]).Should().Be("818727");
+            JsonTestHelpers.GetString(payload["idp"]).Should().Be("local");
 
-            payload["aud"].Should().Be("api");
+            JsonTestHelpers.GetString(payload["aud"]).Should().Be("api");
 
-            var scopes = payload["scope"] as JsonArray;
+            var scopes = JsonTestHelpers.GetJsonArray(payload["scope"]);
             scopes.First().ToString().Should().Be("api1");
 
-            var amr = payload["amr"] as JsonArray;
+            var amr = JsonTestHelpers.GetJsonArray(payload["amr"]);
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("delegation");
         }
@@ -529,19 +530,19 @@ namespace IdentityServer.IntegrationTests.Clients
             var payload = GetPayload(response);
 
             payload.Count().Should().Be(13);
-            payload.Should().Contain("iss", "https://idsvr4");
-            payload.Should().Contain("client_id", "client.dynamic");
-            payload.Should().Contain("sub", "818727");
-            payload.Should().Contain("idp", "local");
+            JsonTestHelpers.GetString(payload["iss"]).Should().Be("https://idsvr4");
+            JsonTestHelpers.GetString(payload["client_id"]).Should().Be("client.dynamic");
+            JsonTestHelpers.GetString(payload["sub"]).Should().Be("818727");
+            JsonTestHelpers.GetString(payload["idp"]).Should().Be("local");
 
-            payload.Should().Contain("client_extra", "extra_claim");
+            JsonTestHelpers.GetString(payload["client_extra"]).Should().Be("extra_claim");
 
-            payload["aud"].Should().Be("api");
+            JsonTestHelpers.GetString(payload["aud"]).Should().Be("api");
 
-            var scopes = payload["scope"] as JsonArray;
+            var scopes = JsonTestHelpers.GetJsonArray(payload["scope"]);
             scopes.First().ToString().Should().Be("api1");
 
-            var amr = payload["amr"] as JsonArray;
+            var amr = JsonTestHelpers.GetJsonArray(payload["amr"]);
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("delegation");
         }
@@ -575,13 +576,13 @@ namespace IdentityServer.IntegrationTests.Clients
             var payload = GetPayload(response);
 
             payload.Count().Should().Be(9);
-            payload.Should().Contain("iss", "https://idsvr4");
-            payload.Should().Contain("client_id", "client.dynamic");
-            payload.Should().Contain("client_extra", "extra_claim");
+            JsonTestHelpers.GetString(payload["iss"]).Should().Be("https://idsvr4");
+            JsonTestHelpers.GetString(payload["client_id"]).Should().Be("client.dynamic");
+            JsonTestHelpers.GetString(payload["client_extra"]).Should().Be("extra_claim");
 
-            payload["aud"].Should().Be("api");
+            JsonTestHelpers.GetString(payload["aud"]).Should().Be("api");
 
-            var scopes = payload["scope"] as JsonArray;
+            var scopes = JsonTestHelpers.GetJsonArray(payload["scope"]);
             scopes.First().ToString().Should().Be("api1");
         }
 

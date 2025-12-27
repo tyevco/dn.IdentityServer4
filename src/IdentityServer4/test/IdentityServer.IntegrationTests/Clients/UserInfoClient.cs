@@ -12,6 +12,7 @@ using FluentAssertions;
 using IdentityModel;
 using IdentityModel.Client;
 using IdentityServer.IntegrationTests.Clients.Setup;
+using IdentityServer.IntegrationTests.Common;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using System.Text.Json;
@@ -175,7 +176,7 @@ namespace IdentityServer.IntegrationTests.Clients
             
             var payload = GetPayload(response);
 
-            var scopes = (payload["scope"] as JsonArray).Select(x => x.ToString()).ToArray();
+            var scopes = JsonTestHelpers.GetJsonArray(payload["scope"]).Select(x => x.ToString()).ToArray();
             scopes.Length.Should().Be(5);
             scopes.Should().Contain("openid");
             scopes.Should().Contain("email");
@@ -183,7 +184,7 @@ namespace IdentityServer.IntegrationTests.Clients
             scopes.Should().Contain("api4.with.roles");
             scopes.Should().Contain("roles");
 
-            var roles = (payload["role"] as JsonArray).Select(x => x.ToString()).ToArray();
+            var roles = JsonTestHelpers.GetJsonArray(payload["role"]).Select(x => x.ToString()).ToArray();
             roles.Length.Should().Be(2);
             roles.Should().Contain("Geek");
             roles.Should().Contain("Developer");

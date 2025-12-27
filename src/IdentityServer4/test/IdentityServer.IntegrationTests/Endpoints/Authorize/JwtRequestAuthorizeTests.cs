@@ -479,7 +479,7 @@ namespace IdentityServer.IntegrationTests.Endpoints.Authorize
                 });
             var response = await _mockPipeline.BrowserClient.GetAsync(url);
 
-            _mockPipeline.ErrorMessage.Error.Should().Be("invalid_request");
+            _mockPipeline.ErrorMessage.Error.Should().Be("invalid_request_object");
             _mockPipeline.ErrorMessage.ErrorDescription.Should().Be("Parameter mismatch in JWT request");
             _mockPipeline.LoginRequest.Should().BeNull();
         }
@@ -791,7 +791,7 @@ namespace IdentityServer.IntegrationTests.Endpoints.Authorize
 
             var response = await _mockPipeline.BrowserClient.GetAsync(url);
 
-            _mockPipeline.ErrorMessage.Error.Should().Be("invalid_request");
+            _mockPipeline.ErrorMessage.Error.Should().Be("invalid_request_object");
             _mockPipeline.ErrorMessage.ErrorDescription.Should().Be("Invalid JWT request");
             _mockPipeline.LoginRequest.Should().BeNull();
         }
@@ -828,11 +828,11 @@ namespace IdentityServer.IntegrationTests.Endpoints.Authorize
 
             var response = await _mockPipeline.BrowserClient.GetAsync(url);
 
-            _mockPipeline.ErrorMessage.Error.Should().Be("invalid_request");
+            _mockPipeline.ErrorMessage.Error.Should().Be("invalid_request_object");
             _mockPipeline.ErrorMessage.ErrorDescription.Should().Be("Invalid JWT request");
             _mockPipeline.LoginRequest.Should().BeNull();
         }
-        
+
         [Fact]
         [Trait("Category", Category)]
         public async Task authorize_should_ignore_request_uri_when_feature_is_disabled()

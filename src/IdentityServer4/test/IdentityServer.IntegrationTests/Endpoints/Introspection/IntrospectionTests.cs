@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using IdentityModel.Client;
+using IdentityServer.IntegrationTests.Common;
 using IdentityServer.IntegrationTests.Endpoints.Introspection.Setup;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
@@ -182,13 +183,13 @@ namespace IdentityServer.IntegrationTests.Endpoints.Introspection
 
             var values = JsonSerializer.Deserialize<Dictionary<string, object>>(introspectionResponse.Json.GetValueOrDefault().GetRawText());
 
-            values["aud"].GetType().Name.Should().Be("String");
-            values["iss"].GetType().Name.Should().Be("String");
-            values["nbf"].GetType().Name.Should().Be("Int64");
-            values["exp"].GetType().Name.Should().Be("Int64");
-            values["client_id"].GetType().Name.Should().Be("String");
-            values["active"].GetType().Name.Should().Be("Boolean");
-            values["scope"].GetType().Name.Should().Be("String");
+            JsonTestHelpers.GetTypeName(values["aud"]).Should().Be("String");
+            JsonTestHelpers.GetTypeName(values["iss"]).Should().Be("String");
+            JsonTestHelpers.GetTypeName(values["nbf"]).Should().Be("Int64");
+            JsonTestHelpers.GetTypeName(values["exp"]).Should().Be("Int64");
+            JsonTestHelpers.GetTypeName(values["client_id"]).Should().Be("String");
+            JsonTestHelpers.GetTypeName(values["active"]).Should().Be("Boolean");
+            JsonTestHelpers.GetTypeName(values["scope"]).Should().Be("String");
 
             values["scope"].ToString().Should().Be("api1");
         }
@@ -221,15 +222,15 @@ namespace IdentityServer.IntegrationTests.Endpoints.Introspection
 
             var values = JsonSerializer.Deserialize<Dictionary<string, object>>(introspectionResponse.Json.GetValueOrDefault().GetRawText());
 
-            values["aud"].GetType().Name.Should().Be("String");
-            values["iss"].GetType().Name.Should().Be("String");
-            values["nbf"].GetType().Name.Should().Be("Int64");
-            values["exp"].GetType().Name.Should().Be("Int64");
-            values["auth_time"].GetType().Name.Should().Be("Int64");
-            values["client_id"].GetType().Name.Should().Be("String");
-            values["sub"].GetType().Name.Should().Be("String");
-            values["active"].GetType().Name.Should().Be("Boolean");
-            values["scope"].GetType().Name.Should().Be("String");
+            JsonTestHelpers.GetTypeName(values["aud"]).Should().Be("String");
+            JsonTestHelpers.GetTypeName(values["iss"]).Should().Be("String");
+            JsonTestHelpers.GetTypeName(values["nbf"]).Should().Be("Int64");
+            JsonTestHelpers.GetTypeName(values["exp"]).Should().Be("Int64");
+            JsonTestHelpers.GetTypeName(values["auth_time"]).Should().Be("Int64");
+            JsonTestHelpers.GetTypeName(values["client_id"]).Should().Be("String");
+            JsonTestHelpers.GetTypeName(values["sub"]).Should().Be("String");
+            JsonTestHelpers.GetTypeName(values["active"]).Should().Be("Boolean");
+            JsonTestHelpers.GetTypeName(values["scope"]).Should().Be("String");
 
             values["scope"].ToString().Should().Be("api1");
         }
@@ -260,7 +261,7 @@ namespace IdentityServer.IntegrationTests.Endpoints.Introspection
 
             var values = JsonSerializer.Deserialize<Dictionary<string, object>>(introspectionResponse.Json.GetValueOrDefault().GetRawText());
 
-            values["aud"].GetType().Name.Should().Be("JsonArray");
+            JsonTestHelpers.GetTypeName(values["aud"]).Should().Be("List`1");
 
             var audiences = (values["aud"] as JsonArray);
             foreach (var aud in audiences)
@@ -268,12 +269,12 @@ namespace IdentityServer.IntegrationTests.Endpoints.Introspection
                 aud.GetValueKind().Should().Be(System.Text.Json.JsonValueKind.String);
             }
 
-            values["iss"].GetType().Name.Should().Be("String");
-            values["nbf"].GetType().Name.Should().Be("Int64");
-            values["exp"].GetType().Name.Should().Be("Int64");
-            values["client_id"].GetType().Name.Should().Be("String");
-            values["active"].GetType().Name.Should().Be("Boolean");
-            values["scope"].GetType().Name.Should().Be("String");
+            JsonTestHelpers.GetTypeName(values["iss"]).Should().Be("String");
+            JsonTestHelpers.GetTypeName(values["nbf"]).Should().Be("Int64");
+            JsonTestHelpers.GetTypeName(values["exp"]).Should().Be("Int64");
+            JsonTestHelpers.GetTypeName(values["client_id"]).Should().Be("String");
+            JsonTestHelpers.GetTypeName(values["active"]).Should().Be("Boolean");
+            JsonTestHelpers.GetTypeName(values["scope"]).Should().Be("String");
 
             var scopes = values["scope"].ToString();
             scopes.Should().Be("api3-a api3-b");
@@ -305,13 +306,13 @@ namespace IdentityServer.IntegrationTests.Endpoints.Introspection
 
             var values = JsonSerializer.Deserialize<Dictionary<string, object>>(introspectionResponse.Json.GetValueOrDefault().GetRawText());
 
-            values["aud"].GetType().Name.Should().Be("String");
-            values["iss"].GetType().Name.Should().Be("String"); 
-            values["nbf"].GetType().Name.Should().Be("Int64"); 
-            values["exp"].GetType().Name.Should().Be("Int64"); 
-            values["client_id"].GetType().Name.Should().Be("String"); 
-            values["active"].GetType().Name.Should().Be("Boolean"); 
-            values["scope"].GetType().Name.Should().Be("String");
+            JsonTestHelpers.GetTypeName(values["aud"]).Should().Be("String");
+            JsonTestHelpers.GetTypeName(values["iss"]).Should().Be("String"); 
+            JsonTestHelpers.GetTypeName(values["nbf"]).Should().Be("Int64"); 
+            JsonTestHelpers.GetTypeName(values["exp"]).Should().Be("Int64"); 
+            JsonTestHelpers.GetTypeName(values["client_id"]).Should().Be("String"); 
+            JsonTestHelpers.GetTypeName(values["active"]).Should().Be("Boolean"); 
+            JsonTestHelpers.GetTypeName(values["scope"]).Should().Be("String");
 
             var scopes = values["scope"].ToString();
             scopes.Should().Be("api3-a api3-b");

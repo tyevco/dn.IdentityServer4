@@ -204,11 +204,39 @@ namespace IdentityServer4.Validation
                         case string s:
                             payload.Add(key, s);
                             break;
+                        case int i:
+                            payload.Add(key, i.ToString());
+                            break;
+                        case long l:
+                            payload.Add(key, l.ToString());
+                            break;
+                        case bool b:
+                            payload.Add(key, b.ToString().ToLowerInvariant());
+                            break;
+                        case double d:
+                            payload.Add(key, d.ToString());
+                            break;
+                        case JsonElement elem when elem.ValueKind == JsonValueKind.String:
+                            payload.Add(key, elem.GetString());
+                            break;
+                        case JsonElement elem when elem.ValueKind == JsonValueKind.Number:
+                            payload.Add(key, elem.GetRawText());
+                            break;
+                        case JsonElement elem when elem.ValueKind == JsonValueKind.True:
+                            payload.Add(key, "true");
+                            break;
+                        case JsonElement elem when elem.ValueKind == JsonValueKind.False:
+                            payload.Add(key, "false");
+                            break;
                         case JsonElement elem when elem.ValueKind == JsonValueKind.Object:
                             payload.Add(key, JsonSerializer.Serialize(elem));
                             break;
                         case JsonElement elem when elem.ValueKind == JsonValueKind.Array:
                             payload.Add(key, JsonSerializer.Serialize(elem));
+                            break;
+                        default:
+                            // Handle any other types by converting to string
+                            payload.Add(key, value?.ToString() ?? string.Empty);
                             break;
                     }
                 }

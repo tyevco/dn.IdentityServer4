@@ -12,6 +12,7 @@ using FluentAssertions;
 using IdentityModel;
 using IdentityModel.Client;
 using IdentityServer.IntegrationTests.Clients.Setup;
+using IdentityServer.IntegrationTests.Common;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using System.Text.Json;
@@ -58,20 +59,20 @@ namespace IdentityServer.IntegrationTests.Clients
             var payload = GetPayload(response);
 
             payload.Count().Should().Be(12);
-            payload.Should().Contain("iss", "https://idsvr4");
-            payload.Should().Contain("client_id", "roclient");
-            payload.Should().Contain("sub", "88421113");
-            payload.Should().Contain("idp", "local");
+            JsonTestHelpers.GetString(payload["iss"]).Should().Be("https://idsvr4");
+            JsonTestHelpers.GetString(payload["client_id"]).Should().Be("roclient");
+            JsonTestHelpers.GetString(payload["sub"]).Should().Be("88421113");
+            JsonTestHelpers.GetString(payload["idp"]).Should().Be("local");
             payload.Keys.Should().Contain("jti");
             payload.Keys.Should().Contain("iat");
-            
-            payload["aud"].Should().Be("api");
 
-            var scopes = (payload["scope"] as JsonArray).Select(x => x.ToString());
+            JsonTestHelpers.GetString(payload["aud"]).Should().Be("api");
+
+            var scopes = JsonTestHelpers.GetJsonArray(payload["scope"]).Select(x => x.ToString());
             scopes.Count().Should().Be(1);
             scopes.Should().Contain("api1");
 
-            var amr = payload["amr"] as JsonArray;
+            var amr = JsonTestHelpers.GetJsonArray(payload["amr"]);
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("pwd");
         }
@@ -97,18 +98,18 @@ namespace IdentityServer.IntegrationTests.Clients
 
             var payload = GetPayload(response);
             
-            payload.Should().Contain("iss", "https://idsvr4");
-            payload.Should().Contain("client_id", "roclient");
-            payload.Should().Contain("sub", "88421113");
-            payload.Should().Contain("idp", "local");
+            JsonTestHelpers.GetString(payload["iss"]).Should().Be("https://idsvr4");
+            JsonTestHelpers.GetString(payload["client_id"]).Should().Be("roclient");
+            JsonTestHelpers.GetString(payload["sub"]).Should().Be("88421113");
+            JsonTestHelpers.GetString(payload["idp"]).Should().Be("local");
 
-            payload["aud"].Should().Be("api");
+            JsonTestHelpers.GetString(payload["aud"]).Should().Be("api");
 
-            var amr = payload["amr"] as JsonArray;
+            var amr = JsonTestHelpers.GetJsonArray(payload["amr"]);
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("pwd");
 
-            var scopes = (payload["scope"] as JsonArray).Select(x => x.ToString());
+            var scopes = JsonTestHelpers.GetJsonArray(payload["scope"]).Select(x => x.ToString());
             scopes.Count().Should().Be(8);
 
             // {[  "address",  "api1",  "api2", "api4.with.roles", "email",  "offline_access",  "openid", "role"]}
@@ -146,20 +147,20 @@ namespace IdentityServer.IntegrationTests.Clients
             var payload = GetPayload(response);
 
             payload.Count().Should().Be(12);
-            payload.Should().Contain("iss", "https://idsvr4");
-            payload.Should().Contain("client_id", "roclient");
-            payload.Should().Contain("sub", "88421113");
-            payload.Should().Contain("idp", "local");
+            JsonTestHelpers.GetString(payload["iss"]).Should().Be("https://idsvr4");
+            JsonTestHelpers.GetString(payload["client_id"]).Should().Be("roclient");
+            JsonTestHelpers.GetString(payload["sub"]).Should().Be("88421113");
+            JsonTestHelpers.GetString(payload["idp"]).Should().Be("local");
             payload.Keys.Should().Contain("jti");
             payload.Keys.Should().Contain("iat");
 
-            payload["aud"].Should().Be("api");
+            JsonTestHelpers.GetString(payload["aud"]).Should().Be("api");
 
-            var amr = payload["amr"] as JsonArray;
+            var amr = JsonTestHelpers.GetJsonArray(payload["amr"]);
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("pwd");
 
-            var scopes = (payload["scope"] as JsonArray).Select(x=>x.ToString());
+            var scopes = JsonTestHelpers.GetJsonArray(payload["scope"]).Select(x=>x.ToString());
             scopes.Count().Should().Be(3);
             scopes.Should().Contain("api1");
             scopes.Should().Contain("email");
@@ -189,20 +190,20 @@ namespace IdentityServer.IntegrationTests.Clients
             var payload = GetPayload(response);
 
             payload.Count().Should().Be(12);
-            payload.Should().Contain("iss", "https://idsvr4");
-            payload.Should().Contain("client_id", "roclient");
-            payload.Should().Contain("sub", "88421113");
-            payload.Should().Contain("idp", "local");
+            JsonTestHelpers.GetString(payload["iss"]).Should().Be("https://idsvr4");
+            JsonTestHelpers.GetString(payload["client_id"]).Should().Be("roclient");
+            JsonTestHelpers.GetString(payload["sub"]).Should().Be("88421113");
+            JsonTestHelpers.GetString(payload["idp"]).Should().Be("local");
             payload.Keys.Should().Contain("jti");
             payload.Keys.Should().Contain("iat");
 
-            payload["aud"].Should().Be("api");
+            JsonTestHelpers.GetString(payload["aud"]).Should().Be("api");
 
-            var amr = payload["amr"] as JsonArray;
+            var amr = JsonTestHelpers.GetJsonArray(payload["amr"]);
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("pwd");
 
-            var scopes = (payload["scope"] as JsonArray).Select(x => x.ToString());
+            var scopes = JsonTestHelpers.GetJsonArray(payload["scope"]).Select(x => x.ToString());
             scopes.Count().Should().Be(4);
             scopes.Should().Contain("api1");
             scopes.Should().Contain("email");
