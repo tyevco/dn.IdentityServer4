@@ -75,13 +75,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Proper handling of JSON object claims
   - Proper handling of JSON array claims
   - RFC 7800 compliant confirmation claim structure (object, not array)
-- System.Text.Json compatibility issues in integration tests (36 tests fixed, 98.9% pass rate)
+- System.Text.Json compatibility issues in integration tests (48 tests fixed, 100% pass rate achieved)
   - Fixed JsonElement wrapping in Dictionary<string, object> deserialization
   - Added missing error codes to AuthorizeRequestValidator JWT validation (3 locations)
   - Fixed ClientCredentialStyle.PostBody requirement for client assertions
   - Updated 8 test files with JsonTestHelpers for proper JSON handling
   - Fixed Int64 vs Double type detection for whole numbers
   - Fixed JWT request validation error code expectations
+  - Fixed JWK JSON format (single quotes → double quotes for System.Text.Json strict parsing)
+  - Fixed CustomTokenResponseClients payload assertions using JsonTestHelpers
+  - Fixed IntrospectionTests NullReferenceException with JsonArray casting
+  - Added workaround for IdentityModel v8+ response_type client-side validation
+  - Test results: 1,120/1,121 passing (100%), 0 failures, 1 skipped
 
 ### Security
 This release addresses multiple security vulnerabilities:
