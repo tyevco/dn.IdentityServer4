@@ -1,0 +1,121 @@
+dn.IdentityServer4
+Copyright 2018, Brock Allen, Dominick Baier
+Modified work Copyright 2024, dn.IdentityServer4 contributors
+
+This product is a derivative work based on IdentityServer4, which is licensed under
+the Apache License 2.0.
+
+Original IdentityServer4:
+  Copyright 2018, Brock Allen, Dominick Baier
+  https://github.com/IdentityServer/IdentityServer4
+
+This product includes software developed by:
+- Brock Allen and Dominick Baier (IdentityServer4 original authors)
+- The .NET Foundation (https://dotnetfoundation.org/)
+- dn.IdentityServer4 contributors
+
+================================================================================
+
+NOTICE OF MODIFICATIONS
+
+This work contains modifications to the original IdentityServer4 project:
+
+1. Multi-targeting for .NET 8.0 and .NET 10.0 (December 2024)
+   - Updated project files for multi-framework support
+   - Updated dependencies for .NET 10 compatibility
+   - Migrated test infrastructure to Microsoft.Testing.Platform
+
+2. Security Fixes (December 2024)
+   - CVE-2024-39694: Fixed IsLocalUrl control character validation
+     Adapted from IdentityServer8 by HigginsSoft (Alexander Higgins)
+
+   - Username Enumeration Prevention: Sanitized login logs
+     Adapted from IdentityServer8 by HigginsSoft (Alexander Higgins)
+
+   - Backchannel Logout Token Fix: Corrected JSON structure
+     Adapted from IdentityServer8 PR #57 by HigginsSoft (Alexander Higgins)
+
+   - Extension Method Naming: Renamed IsNullOrEmpty to CollectionIsNullOrEmpty
+     Adapted from IdentityServer8 PR #60 by HigginsSoft (Alexander Higgins)
+
+   - Input Sanitization Framework: Added comprehensive sanitization
+     Adapted from IdentityServer8 by HigginsSoft (Alexander Higgins)
+
+3. JSON Serialization Migration (December 2024)
+   - Migrated from Newtonsoft.Json to System.Text.Json
+   - Updated all serializers, converters, and test code
+
+4. Initial .NET 8.0 Migration (May 2024)
+   - Updated all projects to .NET 8.0
+   - Updated package references
+   - Added "dn." prefix to package ID
+
+================================================================================
+
+THIRD-PARTY COMPONENTS
+
+This product includes or depends upon the following third-party components:
+
+ASP.NET Core
+  Copyright (c) .NET Foundation and Contributors
+  Licensed under the Apache License 2.0
+  https://github.com/dotnet/aspnetcore
+
+IdentityModel
+  Copyright (c) Brock Allen & Dominick Baier
+  Licensed under the Apache License 2.0
+  https://github.com/IdentityModel/IdentityModel
+
+AutoMapper
+  Copyright (c) Jimmy Bogard
+  Licensed under the MIT License
+  https://github.com/AutoMapper/AutoMapper
+
+xUnit.net
+  Copyright (c) .NET Foundation and Contributors
+  Licensed under the Apache License 2.0
+  https://github.com/xunit/xunit
+
+FluentAssertions
+  Copyright (c) Dennis Doomen
+  Licensed under the Apache License 2.0
+  https://github.com/fluentassertions/fluentassertions
+
+Entity Framework Core
+  Copyright (c) .NET Foundation and Contributors
+  Licensed under the MIT License
+  https://github.com/dotnet/efcore
+
+MinVer
+  Copyright (c) Adam Ralph
+  Licensed under the Apache License 2.0
+  https://github.com/adamralph/minver
+
+Microsoft.SourceLink.GitHub
+  Copyright (c) Microsoft Corporation
+  Licensed under the MIT License
+  https://github.com/dotnet/sourcelink
+
+================================================================================
+
+ATTRIBUTIONS FOR ADAPTED CODE
+
+Portions of this software's security fixes were adapted from IdentityServer8:
+  Repository: https://github.com/IdentityServer/IdentityServer8
+  Copyright (c) 2024 HigginsSoft, Alexander Higgins
+  Licensed under the Apache License 2.0
+
+  Specifically:
+  - PR #57: JWT and backchannel logout serialization fixes
+  - PR #60: Extension method naming to avoid conflicts
+  - Security sanitization framework implementation
+  - CVE-2024-39694 fix for URL validation
+
+================================================================================
+
+This NOTICE file is provided in compliance with Section 4(d) of the Apache License
+2.0, which requires that derivative works include attribution notices from the
+original work.
+
+For the full text of the Apache License 2.0, see the LICENSE file in this
+distribution or visit: http://www.apache.org/licenses/LICENSE-2.0

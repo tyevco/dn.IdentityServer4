@@ -3,14 +3,32 @@ https://github.com/IdentityServer/IdentityServer4
 
 # Changes
 
-2024-05-16: 
+**For detailed changelog, see [CHANGELOG.md](CHANGELOG.md)**
+
+## 2025-12-26: .NET 10 Upgrade and Security Fixes
+  - Added multi-targeting support for .NET 8.0 and .NET 10.0
+  - Fixed **CVE-2024-39694**: IsLocalUrl control character validation vulnerability
+  - Fixed **Username Enumeration Attack**: Sanitized usernames in login failure logs
+  - Fixed **Log Injection Vulnerability**: Implemented comprehensive input sanitization
+  - Fixed **Backchannel Logout Token Structure**: Corrected malformed JSON in logout tokens
+  - Migrated all JSON serialization from Newtonsoft.Json to System.Text.Json
+  - Renamed extension method `IsNullOrEmpty()` to `CollectionIsNullOrEmpty()` to avoid conflicts with Microsoft.IdentityModel.Tokens v8+
+  - Updated all dependencies to latest compatible versions:
+    - AutoMapper 14.0.0
+    - Entity Framework Core 9.0.11 (net8.0) / 10.0.1 (net10.0)
+    - xUnit v3 with Microsoft.Testing.Platform
+    - FluentAssertions 7.2.0
+  - Added comprehensive unit tests for all security fixes
+  - Updated GitHub Actions CI workflow for .NET 10 support
+  - Security fixes adapted from IdentityServer8 (HigginsSoft/Alexander Higgins)
+
+  See [NOTICE](NOTICE) file for full attribution details.
+
+## 2024-05-16: Initial dn. Fork
   Started this section to track changes to comply to LICENSE.
   All projects within repository updated to dotnet8.
   PackageReferences were updated where applicable.
   Added "dn." to package id to denote a different maintainer.
-  
-
-** All the rest of the project was left as-is **
 
 # Important update
 This project is not maintained anymore. This repo will be archived when .NET Core 3.1 end of support is reached (13th Dec 2022). All new development is happening in the new [Duende Software](https://github.com/duendesoftware) organization. 
