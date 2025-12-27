@@ -1,5 +1,6 @@
+using System.Linq;
 using System.Text.Json;
-using IdentityServer4;
+using IdentityModel;
 using Xunit;
 
 namespace IdentityServer.UnitTests.Services.Default

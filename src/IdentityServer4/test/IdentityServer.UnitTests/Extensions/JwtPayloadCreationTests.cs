@@ -141,19 +141,15 @@ namespace IdentityServer.UnitTests.Extensions
         {
             // Arrange - confirmation claim must be an object, not an array
             var confirmationJson = JsonSerializer.Serialize(new { x5t = "thumbprint" });
-            var claims = new List<Claim>
-            {
-                new Claim(JwtClaimTypes.Confirmation, confirmationJson, ClaimValueTypes.String)
-            };
 
             var token = new Token(OidcConstants.TokenTypes.AccessToken)
             {
                 CreationTime = DateTime.UtcNow,
                 Issuer = "issuer",
                 Lifetime = 60,
-                Claims = claims,
+                Claims = new List<Claim>(),
                 ClientId = "client",
-                Confirmation = confirmationJson
+                Confirmation = confirmationJson // Token handles adding this to claims automatically
             };
 
             var options = new IdentityServerOptions();
