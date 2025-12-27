@@ -86,12 +86,12 @@ namespace IdentityServer.IntegrationTests.Clients
             // token content
             var payload = GetPayload(response);
             payload.Count().Should().Be(12);
-            payload.Should().Contain("iss", "https://idsvr4");
-            payload.Should().Contain("client_id", "roclient");
-            payload.Should().Contain("sub", "bob");
-            payload.Should().Contain("idp", "local");
+            JsonTestHelpers.GetString(payload["iss"]).Should().Be("https://idsvr4");
+            JsonTestHelpers.GetString(payload["client_id"]).Should().Be("roclient");
+            JsonTestHelpers.GetString(payload["sub"]).Should().Be("bob");
+            JsonTestHelpers.GetString(payload["idp"]).Should().Be("local");
 
-            payload["aud"].Should().Be("api");
+            JsonTestHelpers.GetString(payload["aud"]).Should().Be("api");
 
             var scopes = JsonTestHelpers.GetJsonArray(payload["scope"]);
             scopes.First().ToString().Should().Be("api1");
@@ -205,12 +205,12 @@ namespace IdentityServer.IntegrationTests.Clients
             // token content
             var payload = GetPayload(response);
             payload.Count().Should().Be(12);
-            payload.Should().Contain("iss", "https://idsvr4");
-            payload.Should().Contain("client_id", "client.custom");
-            payload.Should().Contain("sub", "bob");
-            payload.Should().Contain("idp", "local");
+            JsonTestHelpers.GetString(payload["iss"]).Should().Be("https://idsvr4");
+            JsonTestHelpers.GetString(payload["client_id"]).Should().Be("client.custom");
+            JsonTestHelpers.GetString(payload["sub"]).Should().Be("bob");
+            JsonTestHelpers.GetString(payload["idp"]).Should().Be("local");
 
-            payload["aud"].Should().Be("api");
+            JsonTestHelpers.GetString(payload["aud"]).Should().Be("api");
 
             var scopes = JsonTestHelpers.GetJsonArray(payload["scope"]);
             scopes.First().ToString().Should().Be("api1");

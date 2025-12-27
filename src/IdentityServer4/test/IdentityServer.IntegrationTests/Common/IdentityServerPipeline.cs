@@ -328,6 +328,31 @@ namespace IdentityServer.IntegrationTests.Common
                 extraParams = new Parameters(dict);
             }
 
+            // Workaround for IdentityModel v8+ requiring response_type (for negative testing)
+            if (responseType == null)
+            {
+                var dict = new Dictionary<string, string>();
+                if (clientId != null) dict.Add("client_id", clientId);
+                if (scope != null) dict.Add("scope", scope);
+                if (redirectUri != null) dict.Add("redirect_uri", redirectUri);
+                if (state != null) dict.Add("state", state);
+                if (nonce != null) dict.Add("nonce", nonce);
+                if (loginHint != null) dict.Add("login_hint", loginHint);
+                if (acrValues != null) dict.Add("acr_values", acrValues);
+                if (responseMode != null) dict.Add("response_mode", responseMode);
+                if (codeChallenge != null) dict.Add("code_challenge", codeChallenge);
+                if (codeChallengeMethod != null) dict.Add("code_challenge_method", codeChallengeMethod);
+                if (extraParams != null)
+                {
+                    foreach (var param in extraParams)
+                    {
+                        dict.Add(param.Key, param.Value);
+                    }
+                }
+                var parameters = new Parameters(dict);
+                return new RequestUrl(AuthorizeEndpoint).Create(parameters);
+            }
+
             var url = new RequestUrl(AuthorizeEndpoint).CreateAuthorizeUrl(
                 clientId: clientId,
                 responseType: responseType,

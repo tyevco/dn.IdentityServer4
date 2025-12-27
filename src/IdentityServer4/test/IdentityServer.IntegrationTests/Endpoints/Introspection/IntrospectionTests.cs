@@ -263,10 +263,10 @@ namespace IdentityServer.IntegrationTests.Endpoints.Introspection
 
             JsonTestHelpers.GetTypeName(values["aud"]).Should().Be("List`1");
 
-            var audiences = (values["aud"] as JsonArray);
+            var audiences = JsonTestHelpers.GetJsonArray(values["aud"]);
             foreach (var aud in audiences)
             {
-                aud.GetValueKind().Should().Be(System.Text.Json.JsonValueKind.String);
+                JsonTestHelpers.GetString(aud).Should().NotBeNullOrEmpty();
             }
 
             JsonTestHelpers.GetTypeName(values["iss"]).Should().Be("String");
