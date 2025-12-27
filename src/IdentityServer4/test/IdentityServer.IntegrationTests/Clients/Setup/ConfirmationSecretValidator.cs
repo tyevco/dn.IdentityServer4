@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Models;
 using IdentityServer4.Validation;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace IdentityServer.IntegrationTests.Clients.Setup
 {
@@ -23,7 +23,7 @@ namespace IdentityServer.IntegrationTests.Clients.Setup
                     var result = new SecretValidationResult
                     {
                         Success = true,
-                        Confirmation = JsonConvert.SerializeObject(cnf)
+                        Confirmation = JsonSerializer.Serialize(cnf)
                     };
 
                     return Task.FromResult(result);

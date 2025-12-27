@@ -1,0 +1,1 @@
+Specifying a project for 'dotnet test' should be via '--project'.

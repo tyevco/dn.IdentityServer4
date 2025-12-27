@@ -14,8 +14,8 @@ using IdentityModel.Client;
 using IdentityServer.IntegrationTests.Clients.Setup;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Xunit;
 
 namespace IdentityServer.IntegrationTests.Clients
@@ -62,7 +62,7 @@ namespace IdentityServer.IntegrationTests.Clients
             fields.TryGetValue("token_type", out temp).Should().BeTrue();
             fields.TryGetValue("expires_in", out temp).Should().BeTrue();
 
-            var responseObject = fields["dto"] as JObject;
+            var responseObject = fields["dto"] as JsonObject;
             responseObject.Should().NotBeNull();
 
             var responseDto = GetDto(responseObject);
@@ -92,10 +92,10 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.First().ToString().Should().Be("api1");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"] as JsonArray;
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("password");
         }
@@ -127,7 +127,7 @@ namespace IdentityServer.IntegrationTests.Clients
             fields.TryGetValue("token_type", out temp).Should().BeFalse();
             fields.TryGetValue("expires_in", out temp).Should().BeFalse();
 
-            var responseObject = fields["dto"] as JObject;
+            var responseObject = fields["dto"] as JsonObject;
             responseObject.Should().NotBeNull();
 
             var responseDto = GetDto(responseObject);
@@ -181,7 +181,7 @@ namespace IdentityServer.IntegrationTests.Clients
             fields.TryGetValue("token_type", out temp).Should().BeTrue();
             fields.TryGetValue("expires_in", out temp).Should().BeTrue();
 
-            var responseObject = fields["dto"] as JObject;
+            var responseObject = fields["dto"] as JsonObject;
             responseObject.Should().NotBeNull();
 
             var responseDto = GetDto(responseObject);
@@ -211,10 +211,10 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.First().ToString().Should().Be("api1");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"] as JsonArray;
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("custom");
 
@@ -252,7 +252,7 @@ namespace IdentityServer.IntegrationTests.Clients
             fields.TryGetValue("token_type", out temp).Should().BeFalse();
             fields.TryGetValue("expires_in", out temp).Should().BeFalse();
 
-            var responseObject = fields["dto"] as JObject;
+            var responseObject = fields["dto"] as JsonObject;
             responseObject.Should().NotBeNull();
 
             var responseDto = GetDto(responseObject);
@@ -274,20 +274,20 @@ namespace IdentityServer.IntegrationTests.Clients
             response.RefreshToken.Should().BeNull();
         }
 
-        private CustomResponseDto GetDto(JObject responseObject)
+        private CustomResponseDto GetDto(JsonObject responseObject)
         {
-            return responseObject.ToObject<CustomResponseDto>();
+            return JsonSerializer.Deserialize<CustomResponseDto>(responseObject.ToJsonString());
         }
 
         private Dictionary<string, object> GetFields(TokenResponse response)
         {
-            return response.Json.ToObject<Dictionary<string, object>>();
+            return JsonSerializer.Deserialize<Dictionary<string, object>>(response.Json.GetValueOrDefault().GetRawText());
         }
 
         private Dictionary<string, object> GetPayload(TokenResponse response)
         {
             var token = response.AccessToken.Split('.').Skip(1).Take(1).First();
-            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(
+            var dictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(
                 Encoding.UTF8.GetString(Base64Url.Decode(token)));
 
             return dictionary;

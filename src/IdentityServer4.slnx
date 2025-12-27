@@ -1,0 +1,27 @@
+<Solution>
+  <Folder Name="/Core/">
+    <Project Path="IdentityServer4\src\dn.IdentityServer4.csproj" />
+    <Project Path="Storage\src\dn.IdentityServer4.Storage.csproj" />
+    <Project Path="AspNetIdentity\src\dn.IdentityServer4.AspNetIdentity.csproj" />
+    <Project Path="EntityFramework.Storage\src\dn.IdentityServer4.EntityFramework.Storage.csproj" />
+    <Project Path="EntityFramework\src\dn.IdentityServer4.EntityFramework.csproj" />
+  </Folder>
+
+  <Folder Name="/Tests/">
+    <Project Path="IdentityServer4\test\IdentityServer.UnitTests\IdentityServer.UnitTests.csproj" />
+    <Project Path="IdentityServer4\test\IdentityServer.IntegrationTests\IdentityServer.IntegrationTests.csproj" />
+    <Project Path="EntityFramework\test\IdentityServer4.EntityFramework.Tests\IdentityServer4.EntityFramework.Tests.csproj" />
+    <Project Path="EntityFramework.Storage\test\UnitTests\IdentityServer4.EntityFramework.UnitTests.csproj" />
+    <Project Path="EntityFramework.Storage\test\IntegrationTests\IdentityServer4.EntityFramework.IntegrationTests.csproj" />
+  </Folder>
+
+  <Folder Name="/Hosts/">
+    <Project Path="IdentityServer4\host\dn.IdentitySerer4.Host.csproj" />
+    <Project Path="AspNetIdentity\host\dn.IdentityServer4.AspNetIdentity.Host.csproj" />
+    <Project Path="EntityFramework.Storage\host\ConsoleHost\ConsoleHost.csproj" />
+  </Folder>
+
+  <Folder Name="/Migrations/">
+    <Project Path="AspNetIdentity\migrations\SqlServer\SqlServer.csproj" />
+  </Folder>
+</Solution>

@@ -9,7 +9,7 @@ using FluentAssertions;
 using IdentityModel;
 using IdentityServer.IntegrationTests.Common;
 using IdentityServer4.Models;
-using Newtonsoft.Json;
+using System.Text.Json;
 using Xunit;
 
 namespace IdentityServer.IntegrationTests.Endpoints.DeviceAuthorization
@@ -135,7 +135,7 @@ namespace IdentityServer.IntegrationTests.Endpoints.DeviceAuthorization
             using (var reader = new StreamReader(streamBody))
             {
                 var jsonString = reader.ReadToEnd();
-                return JsonConvert.DeserializeObject<T>(jsonString);
+                return JsonSerializer.Deserialize<T>(jsonString);
             }
         }
 

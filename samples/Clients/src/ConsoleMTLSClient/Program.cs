@@ -1,7 +1,7 @@
 ﻿using Clients;
 using IdentityModel;
 using IdentityModel.Client;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -58,7 +58,7 @@ namespace ConsoleMTLSClient
             var response = await client.GetStringAsync("identity");
 
             "\n\nService claims:".ConsoleGreen();
-            Console.WriteLine(JArray.Parse(response));
+            Console.WriteLine(JsonNode.Parse(response));
         }
 
         static SocketsHttpHandler GetHandler()

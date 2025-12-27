@@ -7,7 +7,7 @@ using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 
 namespace MvcCode.Controllers
 {
@@ -37,7 +37,7 @@ namespace MvcCode.Controllers
             client.SetBearerToken(token);
 
             var response = await client.GetStringAsync(Constants.SampleApi + "identity");
-            ViewBag.Json = JArray.Parse(response).ToString();
+            ViewBag.Json = JsonNode.Parse(response).ToJsonString();
 
             return View();
         }

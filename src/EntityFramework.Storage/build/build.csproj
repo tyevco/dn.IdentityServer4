@@ -10,8 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bullseye" />
-    <PackageReference Include="SimpleExec" />
+    <PackageReference Include="Bullseye" Version="3.8.0" />
+    <PackageReference Include="SimpleExec" Version="7.0.0" />
   </ItemGroup>
   
 </Project>

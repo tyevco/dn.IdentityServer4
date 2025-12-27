@@ -15,13 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.UnitTests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.IntegrationTests", "test\IdentityServer.IntegrationTests\IdentityServer.IntegrationTests.csproj", "{94501373-478A-478D-8C17-6AC52E3438CF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer4.Storage", "..\..\..\IdentityServer4.Storage\src\IdentityServer4.Storage.csproj", "{8C670DBE-BA5C-4C93-845C-A24884257CC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer4.Storage", "..\..\..\IdentityServer4.Storage\src\dn.IdentityServer4.Storage.csproj", "{8C670DBE-BA5C-4C93-845C-A24884257CC9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer4.AspNetIdentity", "..\AspNetIdentity\src\IdentityServer4.AspNetIdentity.csproj", "{8B9476A2-7521-4323-9154-F8E35B339803}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer4.AspNetIdentity", "..\AspNetIdentity\src\dn.IdentityServer4.AspNetIdentity.csproj", "{8B9476A2-7521-4323-9154-F8E35B339803}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer4.EntityFramework", "..\EntityFramework\src\IdentityServer4.EntityFramework.csproj", "{0F8CE6A1-90D3-4C08-8C2C-C0A8E60DBBDF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer4.EntityFramework", "..\EntityFramework\src\dn.IdentityServer4.EntityFramework.csproj", "{0F8CE6A1-90D3-4C08-8C2C-C0A8E60DBBDF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer4.EntityFramework.Storage", "..\EntityFramework.Storage\src\IdentityServer4.EntityFramework.Storage.csproj", "{58DA22F9-E2E3-4E57-8D11-B39D4508178A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer4.EntityFramework.Storage", "..\EntityFramework.Storage\src\dn.IdentityServer4.EntityFramework.Storage.csproj", "{58DA22F9-E2E3-4E57-8D11-B39D4508178A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

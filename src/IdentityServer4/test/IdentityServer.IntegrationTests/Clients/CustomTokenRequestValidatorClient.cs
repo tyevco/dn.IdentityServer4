@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using FluentAssertions;
 using IdentityModel.Client;
@@ -119,7 +120,7 @@ namespace IdentityServer.IntegrationTests.Clients
 
         private Dictionary<string, object> GetFields(TokenResponse response)
         {
-            return response.Json.ToObject<Dictionary<string, object>>();
+            return JsonSerializer.Deserialize<Dictionary<string, object>>(response.Json.GetValueOrDefault().GetRawText());
         }
     }
 }

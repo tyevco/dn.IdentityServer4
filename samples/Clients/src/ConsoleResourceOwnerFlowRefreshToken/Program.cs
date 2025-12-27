@@ -1,7 +1,7 @@
 ﻿using Clients;
 using IdentityModel;
 using IdentityModel.Client;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 using System;
 using System.Net.Http;
 using System.Text;
@@ -92,7 +92,7 @@ namespace ConsoleResourceOwnerFlowRefreshToken
             var response = await client.GetStringAsync("identity");
 
             "\n\nService claims:".ConsoleGreen();
-            Console.WriteLine(JArray.Parse(response));
+            Console.WriteLine(JsonNode.Parse(response));
         }
 
         private static void ShowResponse(TokenResponse response)
@@ -110,8 +110,8 @@ namespace ConsoleResourceOwnerFlowRefreshToken
                     var header = parts[0];
                     var claims = parts[1];
 
-                    Console.WriteLine(JObject.Parse(Encoding.UTF8.GetString(Base64Url.Decode(header))));
-                    Console.WriteLine(JObject.Parse(Encoding.UTF8.GetString(Base64Url.Decode(claims))));
+                    Console.WriteLine(JsonNode.Parse(Encoding.UTF8.GetString(Base64Url.Decode(header))));
+                    Console.WriteLine(JsonNode.Parse(Encoding.UTF8.GetString(Base64Url.Decode(claims))));
                 }
             }
             else

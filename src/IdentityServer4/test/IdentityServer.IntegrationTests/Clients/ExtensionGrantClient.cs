@@ -16,8 +16,8 @@ using IdentityModel.Client;
 using IdentityServer.IntegrationTests.Clients.Setup;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Xunit;
 
 namespace IdentityServer.IntegrationTests.Clients
@@ -77,10 +77,10 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.First().ToString().Should().Be("api1");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"] as JsonArray;
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("custom");
         }
@@ -127,10 +127,10 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.First().ToString().Should().Be("api1");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"] as JsonArray;
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("custom");
         }
@@ -194,10 +194,10 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.First().ToString().Should().Be("api1");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"] as JsonArray;
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("custom");
         }
@@ -235,7 +235,7 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.First().ToString().Should().Be("api1");
         }
 
@@ -273,11 +273,11 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"] as JsonArray;
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("custom");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.Count().Should().Be(3);
             scopes.First().ToString().Should().Be("api1");
             scopes.Skip(1).First().ToString().Should().Be("api2");
@@ -397,10 +397,10 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.First().ToString().Should().Be("api1");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"] as JsonArray;
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("delegation");
         }
@@ -538,10 +538,10 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.First().ToString().Should().Be("api1");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"] as JsonArray;
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("delegation");
         }
@@ -581,14 +581,14 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.First().ToString().Should().Be("api1");
         }
 
         private Dictionary<string, object> GetPayload(TokenResponse response)
         {
             var token = response.AccessToken.Split('.').Skip(1).Take(1).First();
-            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(
+            var dictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(
                 Encoding.UTF8.GetString(Base64Url.Decode(token)));
 
             return dictionary;

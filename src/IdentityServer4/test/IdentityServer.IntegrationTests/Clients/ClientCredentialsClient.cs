@@ -14,8 +14,8 @@ using IdentityModel.Client;
 using IdentityServer.IntegrationTests.Clients.Setup;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Xunit;
 
 namespace IdentityServer.IntegrationTests.Clients
@@ -79,7 +79,7 @@ namespace IdentityServer.IntegrationTests.Clients
             
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.First().ToString().Should().Be("api1");
         }
 
@@ -108,12 +108,12 @@ namespace IdentityServer.IntegrationTests.Clients
             payload.Keys.Should().Contain("jti");
             payload.Keys.Should().Contain("iat");
 
-            var audiences = ((JArray)payload["aud"]).Select(x => x.ToString());
+            var audiences = (payload["aud"] as JsonArray).Select(x => x.ToString());
             audiences.Count().Should().Be(2);
             audiences.Should().Contain("api");
             audiences.Should().Contain("other_api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.First().ToString().Should().Be("api1");
         }
 
@@ -144,10 +144,10 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.First().ToString().Should().Be("api1");
 
-            var cnf = payload["cnf"] as JObject;
+            var cnf = payload["cnf"] as JsonObject;
             cnf["x5t#S256"].ToString().Should().Be("foo");
         }
 
@@ -178,7 +178,7 @@ namespace IdentityServer.IntegrationTests.Clients
             
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.Count().Should().Be(2);
             scopes.First().ToString().Should().Be("api1");
             scopes.Skip(1).First().ToString().Should().Be("api2");
@@ -208,12 +208,12 @@ namespace IdentityServer.IntegrationTests.Clients
             payload.Keys.Should().Contain("jti");
             payload.Keys.Should().Contain("iat");
 
-            var audiences = ((JArray)payload["aud"]).Select(x => x.ToString());
+            var audiences = (payload["aud"] as JsonArray).Select(x => x.ToString());
             audiences.Count().Should().Be(2);
             audiences.Should().Contain("api");
             audiences.Should().Contain("other_api");
 
-            var scopes = ((JArray)payload["scope"]).Select(x => x.ToString());
+            var scopes = (payload["scope"] as JsonArray).Select(x => x.ToString());
             scopes.Count().Should().Be(3);
             scopes.Should().Contain("api1");
             scopes.Should().Contain("api2");
@@ -264,7 +264,7 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.First().ToString().Should().Be("api1");
         }
 
@@ -292,7 +292,7 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.First().ToString().Should().Be("api1");
         }
 
@@ -450,7 +450,7 @@ namespace IdentityServer.IntegrationTests.Clients
         private Dictionary<string, object> GetPayload(TokenResponse response)
         {
             var token = response.AccessToken.Split('.').Skip(1).Take(1).First();
-            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(
+            var dictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(
                 Encoding.UTF8.GetString(Base64Url.Decode(token)));
 
             return dictionary;

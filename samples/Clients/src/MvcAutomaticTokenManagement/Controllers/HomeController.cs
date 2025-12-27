@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -27,7 +27,7 @@ namespace MvcCode.Controllers
             var client = _httpClientFactory.CreateClient("client");
 
             var response = await client.GetStringAsync("identity");
-            ViewBag.Json = JArray.Parse(response).ToString();
+            ViewBag.Json = JsonNode.Parse(response).ToJsonString();
 
             return View();
         }

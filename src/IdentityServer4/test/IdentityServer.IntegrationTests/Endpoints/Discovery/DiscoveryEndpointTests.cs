@@ -10,7 +10,7 @@ using IdentityServer4.Configuration;
 using IdentityServer4.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
@@ -32,7 +32,7 @@ namespace IdentityServer.IntegrationTests.Endpoints.Discovery
             var result = await pipeline.BackChannelClient.GetAsync("HTTPS://SERVER/ROOT/.WELL-KNOWN/OPENID-CONFIGURATION");
 
             var json = await result.Content.ReadAsStringAsync();
-            var data = JObject.Parse(json);
+            var data = JsonNode.Parse(json) as JsonObject;
             var issuer = data["issuer"].ToString();
 
             issuer.Should().Be("https://server/root");
@@ -50,7 +50,7 @@ namespace IdentityServer.IntegrationTests.Endpoints.Discovery
             var result = await pipeline.BackChannelClient.GetAsync("HTTPS://SERVER/ROOT/.WELL-KNOWN/OPENID-CONFIGURATION");
 
             var json = await result.Content.ReadAsStringAsync();
-            var data = JObject.Parse(json);
+            var data = JsonNode.Parse(json) as JsonObject;
             var issuer = data["issuer"].ToString();
 
             issuer.Should().Be("https://server/ROOT");
@@ -80,13 +80,13 @@ namespace IdentityServer.IntegrationTests.Endpoints.Discovery
             var result = await pipeline.BackChannelClient.GetAsync("https://server/root/.well-known/openid-configuration");
 
             var json = await result.Content.ReadAsStringAsync();
-            var data = JObject.Parse(json);
-            var algorithmsSupported = data["id_token_signing_alg_values_supported"];
+            var data = JsonNode.Parse(json) as JsonObject;
+            var algorithmsSupported = data["id_token_signing_alg_values_supported"] as JsonArray;
 
-            algorithmsSupported.Count().Should().Be(2);
+            algorithmsSupported.Count.Should().Be(2);
 
-            algorithmsSupported.Values().Should().Contain(SecurityAlgorithms.RsaSha256);
-            algorithmsSupported.Values().Should().Contain(SecurityAlgorithms.EcdsaSha256);
+            algorithmsSupported.Select(x => x.GetValue<string>()).Should().Contain(SecurityAlgorithms.RsaSha256);
+            algorithmsSupported.Select(x => x.GetValue<string>()).Should().Contain(SecurityAlgorithms.EcdsaSha256);
         }
 
         [Fact]
@@ -122,7 +122,7 @@ namespace IdentityServer.IntegrationTests.Endpoints.Discovery
             var result = await pipeline.BackChannelClient.GetAsync("https://server/root/.well-known/openid-configuration/jwks");
 
             var json = await result.Content.ReadAsStringAsync();
-            var data = JObject.Parse(json);
+            var data = JsonNode.Parse(json) as JsonObject;
 
             var keys = data["keys"];
             keys.Should().NotBeNull();
@@ -133,7 +133,7 @@ namespace IdentityServer.IntegrationTests.Endpoints.Discovery
             var crv = key["crv"];
             crv.Should().NotBeNull();
 
-            crv.Value<string>().Should().Be(JsonWebKeyECTypes.P256);
+            crv.GetValue<string>().Should().Be(JsonWebKeyECTypes.P256);
 
         }
 
@@ -147,7 +147,7 @@ namespace IdentityServer.IntegrationTests.Endpoints.Discovery
             var result = await pipeline.BackChannelClient.GetAsync("https://server/root/.well-known/openid-configuration/jwks");
 
             var json = await result.Content.ReadAsStringAsync();
-            var data = JObject.Parse(json);
+            var data = JsonNode.Parse(json) as JsonObject;
 
             var keys = data["keys"];
             keys.Should().NotBeNull();
@@ -158,7 +158,7 @@ namespace IdentityServer.IntegrationTests.Endpoints.Discovery
             var alg = key["alg"];
             alg.Should().NotBeNull();
 
-            alg.Value<string>().Should().Be(Constants.SigningAlgorithms.RSA_SHA_256);
+            alg.GetValue<string>().Should().Be(Constants.SigningAlgorithms.RSA_SHA_256);
         }
 
         [Theory]

@@ -18,8 +18,8 @@ using IdentityServer.IntegrationTests.Common;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Xunit;
 
 namespace IdentityServer.IntegrationTests.Clients
@@ -210,7 +210,7 @@ namespace IdentityServer.IntegrationTests.Clients
             payload.Should().Contain("client_id", ClientId);
             payload.Keys.Should().Contain("iat");
             
-            var scopes = payload["scope"] as JArray;
+            var scopes = payload["scope"] as JsonArray;
             scopes.First().ToString().Should().Be("api1");
 
             payload["aud"].Should().Be("api");
@@ -219,7 +219,7 @@ namespace IdentityServer.IntegrationTests.Clients
         private Dictionary<string, object> GetPayload(TokenResponse response)
         {
             var token = response.AccessToken.Split('.').Skip(1).Take(1).First();
-            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(
+            var dictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(
                 Encoding.UTF8.GetString(Base64Url.Decode(token)));
 
             return dictionary;

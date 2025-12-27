@@ -14,8 +14,8 @@ using IdentityModel.Client;
 using IdentityServer.IntegrationTests.Clients.Setup;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using Xunit;
 
 namespace IdentityServer.IntegrationTests.Clients
@@ -67,11 +67,11 @@ namespace IdentityServer.IntegrationTests.Clients
             
             payload["aud"].Should().Be("api");
 
-            var scopes = ((JArray)payload["scope"]).Select(x => x.ToString());
+            var scopes = (payload["scope"] as JsonArray).Select(x => x.ToString());
             scopes.Count().Should().Be(1);
             scopes.Should().Contain("api1");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"] as JsonArray;
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("pwd");
         }
@@ -104,11 +104,11 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"] as JsonArray;
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("pwd");
 
-            var scopes = ((JArray)payload["scope"]).Select(x => x.ToString());
+            var scopes = (payload["scope"] as JsonArray).Select(x => x.ToString());
             scopes.Count().Should().Be(8);
 
             // {[  "address",  "api1",  "api2", "api4.with.roles", "email",  "offline_access",  "openid", "role"]}
@@ -155,11 +155,11 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"] as JsonArray;
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("pwd");
 
-            var scopes = ((JArray)payload["scope"]).Select(x=>x.ToString());
+            var scopes = (payload["scope"] as JsonArray).Select(x=>x.ToString());
             scopes.Count().Should().Be(3);
             scopes.Should().Contain("api1");
             scopes.Should().Contain("email");
@@ -198,11 +198,11 @@ namespace IdentityServer.IntegrationTests.Clients
 
             payload["aud"].Should().Be("api");
 
-            var amr = payload["amr"] as JArray;
+            var amr = payload["amr"] as JsonArray;
             amr.Count().Should().Be(1);
             amr.First().ToString().Should().Be("pwd");
 
-            var scopes = ((JArray)payload["scope"]).Select(x => x.ToString());
+            var scopes = (payload["scope"] as JsonArray).Select(x => x.ToString());
             scopes.Count().Should().Be(4);
             scopes.Should().Contain("api1");
             scopes.Should().Contain("email");
@@ -272,7 +272,7 @@ namespace IdentityServer.IntegrationTests.Clients
         private static Dictionary<string, object> GetPayload(IdentityModel.Client.TokenResponse response)
         {
             var token = response.AccessToken.Split('.').Skip(1).Take(1).First();
-            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(
+            var dictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(
                 Encoding.UTF8.GetString(Base64Url.Decode(token)));
 
             return dictionary;

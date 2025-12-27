@@ -1,7 +1,7 @@
 ﻿using Clients;
 using IdentityModel.Client;
 using IdentityModel.OidcClient;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 using Serilog;
 using System;
 using System.Net.Http;
@@ -123,7 +123,7 @@ namespace ConsoleClientWithBrowser
 
             if (response.IsSuccessStatusCode)
             {
-                var json = JArray.Parse(await response.Content.ReadAsStringAsync());
+                var json = JsonNode.Parse(await response.Content.ReadAsStringAsync());
                 Console.WriteLine("\n\n");
                 Console.WriteLine(json);
             }

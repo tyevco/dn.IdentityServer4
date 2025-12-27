@@ -13,7 +13,7 @@ using Clients;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 using System.Net.Http;
 
 namespace MvcImplicit.Controllers
@@ -138,7 +138,7 @@ namespace MvcImplicit.Controllers
             var eventsJson = claims.FindFirst("events")?.Value;
             if (String.IsNullOrWhiteSpace(eventsJson)) throw new Exception("Invalid logout token");
 
-            var events = JObject.Parse(eventsJson);
+            var events = JsonNode.Parse(eventsJson).AsObject();
             var logoutEvent = events.TryGetValue("http://schemas.openid.net/event/backchannel-logout");
             if (logoutEvent == null) throw new Exception("Invalid logout token");
 

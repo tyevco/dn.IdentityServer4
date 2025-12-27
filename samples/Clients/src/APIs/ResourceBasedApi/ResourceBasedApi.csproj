@@ -11,11 +11,12 @@
   <ItemGroup>
     <PackageReference Include="IdentityModel.AspNetCore.AccessTokenValidation" Version="1.0.0-preview.3" />
     <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="4.0.1" />
-      
+
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />  
-    
-    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+
+    <PackageReference Include="Serilog" Version="4.1.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.3" />
   </ItemGroup>
 
 </Project>

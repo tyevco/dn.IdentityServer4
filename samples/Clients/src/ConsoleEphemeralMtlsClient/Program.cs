@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Clients;
 using IdentityModel;
 using IdentityModel.Client;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 
 namespace ConsoleEphemeralMtlsClient
 {
@@ -62,7 +62,7 @@ namespace ConsoleEphemeralMtlsClient
             var response = await client.GetStringAsync("identity");
 
             "\n\nService claims:".ConsoleGreen();
-            Console.WriteLine(JArray.Parse(response));
+            Console.WriteLine(JsonNode.Parse(response));
         }
         
         static X509Certificate2 CreateClientCertificate(string name)
