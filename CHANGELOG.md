@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Unit tests for all security fixes and sanitization framework
 - Microsoft.Testing.Platform support for modern test runner experience
 - GitHub Actions CI workflow enhancements for .NET 10 support
+- JsonTestHelpers utility class for handling System.Text.Json JsonElement unwrapping in tests
+  - GetString, GetInt64, GetBoolean methods for primitive type extraction
+  - GetJsonArray, GetJsonObject methods for complex type handling
+  - GetTypeName method for type assertions with Int64/Double normalization
 
 ### Changed
 - **BREAKING**: Extension method renamed from `IsNullOrEmpty()` to `CollectionIsNullOrEmpty()` to avoid conflict with Microsoft.IdentityModel.Tokens v8+
@@ -43,6 +47,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Project references updated to use renamed dn.IdentityServer4.csproj
 - Removed centralized package management (src/Directory.Build.targets)
 - Changed IEnumerableExtensions visibility from internal to public in Storage project
+- Replaced obsolete JsonSerializerOptions.IgnoreNullValues with DefaultIgnoreCondition.WhenWritingNull
+  - Updated ObjectSerializer.cs and LogSerializer.cs for .NET 8/10 compatibility
+- Enhanced JwtRequestValidator.ProcessPayloadAsync() to handle all JsonElement types
+  - Added support for JsonElement primitives (String, Number, True, False)
+  - Added support for raw types (int, long, bool, double)
+  - Added default case for unhandled types
 
 ### Fixed
 - **CVE-2024-39694**: IsLocalUrl control character validation vulnerability
@@ -65,6 +75,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Proper handling of JSON object claims
   - Proper handling of JSON array claims
   - RFC 7800 compliant confirmation claim structure (object, not array)
+- System.Text.Json compatibility issues in integration tests (36 tests fixed, 98.9% pass rate)
+  - Fixed JsonElement wrapping in Dictionary<string, object> deserialization
+  - Added missing error codes to AuthorizeRequestValidator JWT validation (3 locations)
+  - Fixed ClientCredentialStyle.PostBody requirement for client assertions
+  - Updated 8 test files with JsonTestHelpers for proper JSON handling
+  - Fixed Int64 vs Double type detection for whole numbers
+  - Fixed JWT request validation error code expectations
 
 ### Security
 This release addresses multiple security vulnerabilities:
